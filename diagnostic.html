@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kingdom Order Alignment — The Mirror</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15122B; --ink-2:#1E1B3A; --ink-3:#28244F;
+    --gold:#CBA255; --gold-soft:#E4CB8E; --ivory:#F3EEE3; --dim:#A9A3BE;
+    --line:rgba(203,162,85,.24);
+    --rose:#C8746A; --amber:#D6A65A; --sage:#7FA38C;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #221E45 0%, rgba(34,30,69,0) 60%),
+      var(--ink);
+    color:var(--ivory);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:0 22px 80px}
+  .topbar{position:sticky;top:0;z-index:10;background:linear-gradient(var(--ink) 70%,rgba(21,18,43,0));padding:18px 0 12px}
+  .brand{display:flex;align-items:center;gap:11px;justify-content:center}
+  .plumb{width:20px;height:34px;flex:none}
+  .brand-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;letter-spacing:.04em}
+  .progress{height:2px;background:rgba(243,238,227,.12);border-radius:2px;margin-top:14px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-soft));transition:width .5s ease}
+  .screen{padding-top:30px;animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 14px}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(30px,7vw,44px);line-height:1.08;margin:0 0 14px;letter-spacing:.01em}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(24px,5.5vw,32px);line-height:1.12;margin:0 0 10px}
+  p.lede{color:#D8D3E0;font-size:16px;margin:0 0 18px}
+  .scripture{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:var(--gold-soft);border-left:2px solid var(--line);padding:6px 0 6px 16px;margin:22px 0}
+  .scripture small{display:block;font-style:normal;font-family:'Inter',sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:8px}
+  .card{background:linear-gradient(180deg,var(--ink-2),rgba(30,27,58,.6));border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;margin:14px 0}
+  .statement{font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.25;margin:0 0 14px;color:var(--ivory)}
+  .scale{display:flex;gap:8px;justify-content:space-between}
+  .dot{flex:1;aspect-ratio:1;max-width:54px;border:1px solid var(--line);background:transparent;color:var(--dim);border-radius:50%;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:.18s;display:flex;align-items:center;justify-content:center}
+  .dot:hover{border-color:var(--gold);color:var(--ivory)}
+  .dot[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#1a1730;box-shadow:0 0 0 4px rgba(203,162,85,.16)}
+  .scale-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:9px;letter-spacing:.02em}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:15.5px;letter-spacing:.02em;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#1a1730;border-radius:11px;padding:15px 22px;width:100%;margin-top:20px;transition:.2s;box-shadow:0 8px 24px -10px rgba(203,162,85,.6)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none;filter:none}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ivory);box-shadow:none}
+  .bars{margin:8px 0 4px}
+  .bar-row{margin:16px 0}
+  .bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .bar-name{font-family:'Cormorant Garamond',serif;font-size:20px}
+  .bar-tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+  .bar-track{height:9px;background:rgba(243,238,227,.08);border-radius:6px;overflow:hidden}
+  .bar-fill{height:100%;width:0;border-radius:6px;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+  .rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;border-radius:7px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  .cell{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--ink-2)}
+  .cell .nm{font-size:14px;font-weight:500}
+  .cell .sc{font-size:11px;color:var(--dim);margin-top:3px;letter-spacing:.04em;text-transform:uppercase}
+  .pill{display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:8px}
+  .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--ink-2);color:var(--ivory);border-radius:12px;padding:14px 16px;margin:9px 0;cursor:pointer;transition:.16s}
+  .opt:hover{border-color:var(--gold)}
+  .opt[aria-pressed="true"]{border-color:var(--gold);background:linear-gradient(180deg,rgba(203,162,85,.16),rgba(203,162,85,.06));box-shadow:0 0 0 3px rgba(203,162,85,.12)}
+  .opt b{display:block;font-size:15px;font-weight:600}
+  .opt span{display:block;font-size:12.5px;color:var(--dim);margin-top:2px}
+  .crit{font-family:'Cormorant Garamond',serif;font-size:20px;margin:18px 0 4px}
+  .crit small{display:block;font-family:'Inter',sans-serif;font-size:13px;font-style:normal;color:var(--dim);margin-top:3px}
+  .areaitem{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .areaitem:last-child{border-bottom:none}
+  .areaitem .meta{flex:1}
+  .areaitem .a-nm{font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.1}
+  .areaitem .a-sub{font-size:11px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+  input[type=date]{width:100%;background:var(--ink-2);border:1px solid var(--line);color:var(--ivory);border-radius:11px;padding:13px 14px;font-family:'Inter';font-size:15px;margin-top:6px;color-scheme:dark}
+  .commit-pick{border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:9px 0;cursor:pointer;display:flex;gap:11px;align-items:center}
+  .commit-pick[aria-pressed="true"]{border-color:var(--gold);background:rgba(203,162,85,.08)}
+  .tick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--gold);flex:none;display:flex;align-items:center;justify-content:center}
+  .commit-pick[aria-pressed="true"] .tick{background:var(--gold)}
+  .note{font-size:12.5px;color:var(--dim);text-align:center;margin-top:26px;line-height:1.5}
+  .seal{text-align:center;margin:6px 0 18px}
+  .seal svg{opacity:.9}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  :focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap" style="padding-bottom:0">
+    <div class="brand">
+      <svg class="plumb" viewBox="0 0 20 34" fill="none" aria-hidden="true">
+        <line x1="10" y1="0" x2="10" y2="18" stroke="#CBA255" stroke-width="1.4"/>
+        <path d="M10 18 L15 22 L10 33 L5 22 Z" fill="#CBA255"/>
+        <circle cx="10" cy="2" r="2" fill="#E4CB8E"/>
+      </svg>
+      <span class="brand-name">Kingdom Order Alignment</span>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+  </div>
+</div>
+
+<div class="wrap"><div id="app"></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var SECTORS = [
+    { key:"health", name:"Health",
+      mirror:[
+        "My mind is at peace more often than it is anxious or scattered.",
+        "I treat my body as a temple — rest, movement, and nourishment are in order.",
+        "My spirit feels steady and connected to God day to day."],
+      subs:[
+        {name:"Mental", q:["My thoughts stay ordered and focused.","I guard my mind against anxiety and spiraling."]},
+        {name:"Physical", q:["I move my body consistently.","I get rest that truly restores me."]},
+        {name:"Spiritual", q:["I spend consistent time with God in prayer and the Word.","My walk with God is growing, not stagnant."]},
+        {name:"Nutritional", q:["What I eat genuinely fuels me.","I eat with intention, not just convenience."]},
+        {name:"Emotional", q:["I process my emotions in healthy ways.","I'm not carrying unresolved hurt or offense."]}]},
+    { key:"wealth", name:"Wealth",
+      mirror:[
+        "I am intentionally stewarding and growing what I've been given.",
+        "I am not in bondage to debt or obligations I can't control.",
+        "My work and income reflect diligence and a clear direction."],
+      subs:[
+        {name:"Assets", q:["I know what I own and steward it on purpose.","I'm building assets, not only earning income."]},
+        {name:"Liabilities", q:["My debts are under control and shrinking.","I am not a servant to any lender."]},
+        {name:"Business / Career", q:["My work is diligent and aligned with my calling.","I'm advancing in my work, not stuck."]},
+        {name:"Acquisitions", q:["I acquire things intentionally, in line with my goals.","My purchases build me up rather than set me back."]},
+        {name:"Financial Growth", q:["My income or net worth is trending upward.","I have a clear plan for financial growth."]}]},
+    { key:"relationships", name:"Relationships",
+      mirror:[
+        "My closest relationships are tended, not neglected.",
+        "My love for God orders the way I treat everyone else.",
+        "I'm surrounded by people who sharpen me rather than drain me."],
+      subs:[
+        {name:"Family", q:["I give my family consistent, undistracted time.","My household is ordered around shared values."]},
+        {name:"Business", q:["My business relationships are aligned and trustworthy.","I'm not unequally yoked in my partnerships."]},
+        {name:"Networking", q:["I'm surrounded by wise people who sharpen me.","I build my network with intention."]},
+        {name:"Spiritual", q:["I'm planted in a spiritual community.","I have people who pray with me and for me."]},
+        {name:"Fundamental", q:["My love for God orders all my other relationships.","I love others from a place of being loved by God."]},
+        {name:"Romantic", q:["My romantic life is healthy and God-honoring.","There is peace, not friction, in my closest bond."]}]},
+    { key:"goals", name:"Goals / Purpose",
+      mirror:[
+        "My days move toward goals I have actually defined.",
+        "What I'm building is meant to outlast me.",
+        "I partner and collaborate on purpose, not by accident."],
+      subs:[
+        {name:"Personal", q:["I have clear personal goals I'm pursuing.","My daily life moves me toward who I want to become."]},
+        {name:"Family", q:["We have shared family goals.","I'm building a family vision on purpose."]},
+        {name:"Business", q:["My business has defined goals and direction.","I know my next business milestone."]},
+        {name:"Legacy / Generational", q:["I'm building something that outlasts me.","I think intentionally about the inheritance I'm leaving."]},
+        {name:"Collaborations", q:["I partner toward shared goals on purpose.","My collaborations are fruitful and aligned."]}]},
+    { key:"destiny", name:"Destiny",
+      mirror:[
+        "I am actively using the gifts and calling God placed in me.",
+        "My passions and skills are being developed, not buried.",
+        "I have a clear sense of the directives God has given me."],
+      subs:[
+        {name:"Gifts", q:["I know my God-given gifts.","I am actively using my gifts."]},
+        {name:"Talents", q:["My talents are developed, not buried.","I steward my talents well."]},
+        {name:"Trades / Skills", q:["I'm growing in my skills and craft.","My skills are aligned with my calling."]},
+        {name:"Passions", q:["I'm pursuing what I'm truly passionate about.","My passions have a real place in my life."]},
+        {name:"God Directives", q:["I sense God's specific directives for me.","I'm obeying what God has shown me to do."]}]}
+  ];
+  var FOUND = {destiny:5, goals:4, relationships:3, health:2, wealth:1};
+
+  var S = { screen:"intro", mirror:{}, flagged:[], sub:{}, candidates:[], matrix:{}, commitId:null, commitDate:"" };
+  var app = document.getElementById("app");
+  var prog = document.getElementById("prog");
+
+  function setProg(p){ prog.style.width = Math.round(p*100)+"%"; }
+  function scrollTop(){ window.scrollTo({top:0, behavior:"smooth"}); }
+  function avg(a){ return a.reduce(function(x,y){return x+y;},0)/a.length; }
+  function band(v){ // 1..5 score -> color + label (low score = misaligned)
+    if(v<=2) return {c:"var(--rose)", t:"Out of order"};
+    if(v<=3) return {c:"var(--amber)", t:"Strained"};
+    if(v<=4) return {c:"var(--gold-soft)", t:"Forming"};
+    return {c:"var(--sage)", t:"In order"};
+  }
+  function go(screen){ S.screen=screen; render(); scrollTop(); }
+
+  function render(){
+    if(S.screen==="intro") return intro();
+    if(S.screen==="mirror") return mirror();
+    if(S.screen==="readout") return readout();
+    if(S.screen==="subs") return subs();
+    if(S.screen==="heat") return heat();
+    if(S.screen==="matrix") return matrix();
+    if(S.screen==="commit") return commit();
+    if(S.screen==="summary") return summary();
+  }
+
+  /* ---------- INTRO ---------- */
+  function intro(){
+    setProg(0.04);
+    app.innerHTML =
+      '<div class="screen">'+
+      '<p class="eyebrow">Phase One · Identify</p>'+
+      '<h1>The Mirror</h1>'+
+      '<p class="lede">Before you can order your life, you have to see it honestly. Answer the reflections that follow as they are true of you <em>right now</em> — not as you wish they were. In a few minutes you\'ll see exactly where your life is most out of alignment, and what to do first.</p>'+
+      '<div class="scripture">For if any be a hearer of the word, and not a doer, he is like unto a man beholding his natural face in a glass.'+
+      '<small>James 1:23 · KJV</small></div>'+
+      '<p class="lede" style="font-size:14px;color:var(--dim)">Takes about 5 minutes · 5 sectors · 26 areas of life</p>'+
+      '<button class="btn" id="start">Begin the reflection</button>'+
+      '</div>';
+    document.getElementById("start").onclick=function(){ go("mirror"); };
+  }
+
+  /* ---------- MIRROR ---------- */
+  function mirror(){
+    setProg(0.22);
+    // flat list of statements, sector hidden
+    var items=[];
+    SECTORS.forEach(function(sec){ sec.mirror.forEach(function(st,i){ items.push({sec:sec.key,i:i,text:st}); }); });
+    if(!S._order){ S._order = items; }
+    var html='<div class="screen"><p class="eyebrow">Look honestly</p><h2>Rate each reflection</h2>'+
+      '<p class="lede">1 = not true of me now &nbsp;·&nbsp; 5 = consistently true.</p>';
+    S._order.forEach(function(it,idx){
+      var saved = (S.mirror[it.sec]&&S.mirror[it.sec][it.i]) || 0;
+      html+='<div class="card"><p class="statement">'+it.text+'</p>'+scaleHTML("m"+idx,saved)+
+        '<div class="scale-ends"><span>Not true now</span><span>Consistently true</span></div></div>';
+    });
+    html+='<button class="btn" id="next" disabled>See my reflection</button></div>';
+    app.innerHTML=html;
+    bindScale(function(id,val){
+      var idx=parseInt(id.slice(1),10), it=S._order[idx];
+      if(!S.mirror[it.sec]) S.mirror[it.sec]=[];
+      S.mirror[it.sec][it.i]=val;
+      var done = SECTORS.every(function(sec){ return S.mirror[sec.key] && S.mirror[sec.key].filter(function(x){return x;}).length===sec.mirror.length; });
+      document.getElementById("next").disabled=!done;
+    });
+    document.getElementById("next").onclick=function(){ computeFlagged(); go("readout"); };
+  }
+
+  function computeFlagged(){
+    var rows = SECTORS.map(function(sec){ return {key:sec.key, name:sec.name, avg:avg(S.mirror[sec.key])}; });
+    rows.sort(function(a,b){ return a.avg-b.avg; }); // most friction first
+    S._sectorRows = rows;
+    var flagged = rows.filter(function(r){ return r.avg < 3.5; }).map(function(r){return r.key;});
+    if(flagged.length<2) flagged = rows.slice(0,2).map(function(r){return r.key;});
+    if(flagged.length>3) flagged = rows.slice(0,3).map(function(r){return r.key;});
+    S.flagged = flagged;
+  }
+
+  /* ---------- READOUT ---------- */
+  function readout(){
+    setProg(0.38);
+    var rows=S._sectorRows;
+    var html='<div class="screen"><p class="eyebrow">Your Misalignment Readout</p>'+
+      '<h2>Where your life is most out of order</h2>'+
+      '<p class="lede">Your reflection, ranked by friction. We\'ll start where the strain is greatest.</p><div class="bars">';
+    rows.forEach(function(r,idx){
+      var b=band(r.avg), pct=Math.max(8,Math.round((r.avg/5)*100));
+      var flagged = S.flagged.indexOf(r.key)>-1;
+      html+='<div class="bar-row"><div class="bar-top"><span class="bar-name">'+
+        '<span style="color:var(--gold)">'+roman(idx+1)+'</span> &nbsp;'+r.name+'</span>'+
+        '<span class="bar-tag" style="color:'+b.c+'">'+(flagged?"Focus":b.t)+'</span></div>'+
+        '<div class="bar-track"><span class="bar-fill" style="background:'+b.c+'" data-w="'+pct+'"></span></div></div>';
+    });
+    html+='</div><div class="scripture">Search me, O God, and know my heart: try me, and know my thoughts.<small>Psalm 139:23 · KJV</small></div>'+
+      '<button class="btn" id="next">Locate the exact friction</button></div>';
+    app.innerHTML=html;
+    setTimeout(function(){ document.querySelectorAll(".bar-fill").forEach(function(f){ f.style.width=f.getAttribute("data-w")+"%"; }); },80);
+    document.getElementById("next").onclick=function(){ S._subIdx=0; go("subs"); };
+  }
+
+  /* ---------- SUBSECTOR DIAGNOSTIC (auto-branching) ---------- */
+  function subs(){
+    setProg(0.5 + 0.12*(S._subIdx/Math.max(1,S.flagged.length)));
+    var secKey=S.flagged[S._subIdx];
+    var sec=SECTORS.filter(function(s){return s.key===secKey;})[0];
+    var html='<div class="screen"><p class="eyebrow">Sector '+(S._subIdx+1)+' of '+S.flagged.length+' · Branching</p>'+
+      '<h2>'+sec.name+'</h2>'+
+      '<p class="lede">Only the areas inside this sector — rate each honestly. The engine scores it for you.</p>';
+    sec.subs.forEach(function(sub,si){
+      sub.q.forEach(function(q,qi){
+        var key=secKey+"|"+sub.name+"|"+qi;
+        var saved=S.sub[key]||0;
+        html+='<div class="card"><p class="statement" style="font-size:18px">'+q+'</p>'+
+          scaleHTML("s::"+key,saved)+'</div>';
+      });
+    });
+    var last = S._subIdx>=S.flagged.length-1;
+    html+='<button class="btn" id="next" disabled>'+(last?"Reveal my heat map":"Next sector")+'</button></div>';
+    app.innerHTML=html;
+    bindScale(function(id,val){
+      var key=id.slice(3); S.sub[key]=val;
+      var need=0,have=0;
+      sec.subs.forEach(function(sub){ sub.q.forEach(function(q,qi){ need++; if(S.sub[secKey+"|"+sub.name+"|"+qi]) have++; }); });
+      document.getElementById("next").disabled = have<need;
+    });
+    document.getElementById("next").onclick=function(){
+      if(S._subIdx<S.flagged.length-1){ S._subIdx++; go("subs"); }
+      else { computeCandidates(); go("heat"); }
+    };
+  }
+
+  function computeCandidates(){
+    var cands=[];
+    S.flagged.forEach(function(secKey){
+      var sec=SECTORS.filter(function(s){return s.key===secKey;})[0];
+      sec.subs.forEach(function(sub){
+        var v0=S.sub[secKey+"|"+sub.name+"|0"], v1=S.sub[secKey+"|"+sub.name+"|1"];
+        var sc=avg([v0,v1]);
+        cands.push({ id:secKey+"|"+sub.name, sector:sec.name, secKey:secKey, sub:sub.name, score:sc,
+          found: FOUND[secKey] + ((sub.name==="Spiritual"||sub.name==="Fundamental"||sub.name==="God Directives")?2:0) });
+      });
+    });
+    S._allSubs=cands.slice();
+    var flagged=cands.filter(function(c){return c.score<=3;});
+    flagged.sort(function(a,b){return a.score-b.score;});
+    if(flagged.length<2){ cands.sort(function(a,b){return a.score-b.score;}); flagged=cands.slice(0,2); }
+    if(flagged.length>5) flagged=flagged.slice(0,5);
+    S.candidates=flagged;
+  }
+
+  /* ---------- HEAT MAP ---------- */
+  function heat(){
+    setProg(0.66);
+    var html='<div class="screen"><p class="eyebrow">The Heat Map</p><h2>Your pinpointed areas</h2>'+
+      '<p class="lede">Every area you assessed, lit by its score. The strained ones below have been flagged automatically as candidates to work on.</p><div class="grid">';
+    S._allSubs.forEach(function(c){
+      var b=band(c.score);
+      html+='<div class="cell" style="border-left:3px solid '+b.c+'"><div class="nm">'+c.sub+'</div>'+
+        '<div class="sc">'+c.sector+'</div></div>';
+    });
+    html+='</div><h2 style="margin-top:26px;font-size:24px">Candidate areas</h2><div class="card">';
+    S.candidates.forEach(function(c){
+      var b=band(c.score);
+      html+='<div class="areaitem"><span class="pill" style="background:'+b.c+';color:#1a1730;margin:0">'+b.t+'</span>'+
+        '<div class="meta"><div class="a-nm">'+c.sub+'</div><div class="a-sub">'+c.sector+'</div></div></div>';
+    });
+    html+='</div><button class="btn" id="next">Rank what matters first</button></div>';
+    app.innerHTML=html;
+    document.getElementById("next").onclick=function(){ S._mIdx=0; go("matrix"); };
+  }
+
+  /* ---------- PAR RANK MATRIX (tap cards) ---------- */
+  var CRIT=[
+    {key:"impact", q:"Impact", sub:"If nothing changes here in 12 months, what does it cost you?",
+      opts:[["A little","Minor cost",1],["Noticeably","Real cost",2],["Deeply","Severe cost",3]]},
+    {key:"leverage", q:"Leverage", sub:"Does fixing this unlock other areas of your life?",
+      opts:[["It's isolated","Stands alone",1],["Some ripple","Helps a few",2],["Foundational","Unlocks much",3]]},
+    {key:"readiness", q:"Readiness", sub:"Is your mind at peace enough to act here now?",
+      opts:[["Not yet","Need peace first",1],["Somewhat","Getting there",2],["Yes","Ready to move",3]]}
+  ];
+  function matrix(){
+    setProg(0.74 + 0.12*(S._mIdx/Math.max(1,S.candidates.length)));
+    var c=S.candidates[S._mIdx];
+    if(!S.matrix[c.id]) S.matrix[c.id]={};
+    var html='<div class="screen"><p class="eyebrow">Rank Matrix · '+(S._mIdx+1)+' of '+S.candidates.length+'</p>'+
+      '<h2>'+c.sub+'</h2><p class="lede" style="color:var(--gold)">'+c.sector+'</p>';
+    CRIT.forEach(function(cr){
+      html+='<div class="crit">'+cr.q+'<small>'+cr.sub+'</small></div>';
+      cr.opts.forEach(function(o){
+        var on = S.matrix[c.id][cr.key]===o[2];
+        html+='<button class="opt" data-cr="'+cr.key+'" data-v="'+o[2]+'" aria-pressed="'+on+'"><b>'+o[0]+'</b><span>'+o[1]+'</span></button>';
+      });
+    });
+    var last=S._mIdx>=S.candidates.length-1;
+    html+='<button class="btn" id="next" disabled>'+(last?"See my ranking":"Next area")+'</button></div>';
+    app.innerHTML=html;
+    app.querySelectorAll(".opt").forEach(function(btn){
+      btn.onclick=function(){
+        var cr=btn.getAttribute("data-cr"), v=parseInt(btn.getAttribute("data-v"),10);
+        S.matrix[c.id][cr]=v;
+        app.querySelectorAll('.opt[data-cr="'+cr+'"]').forEach(function(b){ b.setAttribute("aria-pressed", b===btn); });
+        document.getElementById("next").disabled = !(S.matrix[c.id].impact&&S.matrix[c.id].leverage&&S.matrix[c.id].readiness);
+      };
+    });
+    document.getElementById("next").onclick=function(){
+      if(S._mIdx<S.candidates.length-1){ S._mIdx++; go("matrix"); }
+      else { computeRanks(); go("commit"); }
+    };
+  }
+
+  function computeRanks(){
+    S.candidates.forEach(function(c){
+      var m=S.matrix[c.id]; c.total=m.impact+m.leverage+m.readiness;
+      c.rankNum = c.total>=7?1:(c.total>=5?2:3);
+    });
+    // sort by total desc, Kingdom Order tiebreaker by foundational weight
+    S.candidates.sort(function(a,b){ return (b.total-a.total) || (b.found-a.found) || (a.score-b.score); });
+    if(!S.commitId){ var r1=S.candidates.filter(function(c){return c.rankNum===1;}); S.commitId=(r1[0]||S.candidates[0]).id; }
+    var d=new Date(); d.setDate(d.getDate()+30);
+    if(!S.commitDate) S.commitDate=d.toISOString().slice(0,10);
+  }
+
+  /* ---------- COMMIT ---------- */
+  function commit(){
+    setProg(0.9);
+    var rankColors={1:"var(--sage)",2:"var(--gold-soft)",3:"var(--dim)"};
+    var html='<div class="screen"><p class="eyebrow">Commit</p><h2>Lock your first area</h2>'+
+      '<p class="lede">Your candidates, ordered by the Rank Matrix. Where two tied, the more foundational — the one closer to seeking the kingdom first — was placed higher (Matthew 6:33). Choose the one area you\'ll carry into this 30-day cycle.</p>';
+    S.candidates.forEach(function(c){
+      var on=S.commitId===c.id;
+      html+='<div class="commit-pick" data-id="'+c.id+'" aria-pressed="'+on+'">'+
+        '<span class="tick"></span>'+
+        '<div class="meta" style="flex:1"><div class="a-nm">'+c.sub+'</div>'+
+        '<div class="a-sub">'+c.sector+'</div></div>'+
+        '<span class="rank" style="background:'+rankColors[c.rankNum]+';color:#1a1730">R'+c.rankNum+'</span></div>';
+    });
+    html+='<div style="margin-top:18px"><label class="bar-tag" style="color:var(--gold);letter-spacing:.12em">Target date for this cycle</label>'+
+      '<input type="date" id="cdate" value="'+S.commitDate+'" min="'+new Date().toISOString().slice(0,10)+'"></div>'+
+      '<div class="scripture">Write the vision, and make it plain upon tables, that he may run that readeth it.<small>Habakkuk 2:2 · KJV</small></div>'+
+      '<button class="btn" id="next">Seal my plan</button></div>';
+    app.innerHTML=html;
+    app.querySelectorAll(".commit-pick").forEach(function(el){
+      el.onclick=function(){ S.commitId=el.getAttribute("data-id");
+        app.querySelectorAll(".commit-pick").forEach(function(x){ x.setAttribute("aria-pressed", x===el); }); };
+    });
+    document.getElementById("cdate").onchange=function(e){ S.commitDate=e.target.value; };
+    document.getElementById("next").onclick=function(){ go("summary"); };
+  }
+
+  /* ---------- SUMMARY ---------- */
+  function summary(){
+    setProg(1);
+    var committed=S.candidates.filter(function(c){return c.id===S.commitId;})[0];
+    var dt=new Date(S.commitDate+"T00:00:00");
+    var dstr=dt.toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"});
+    var html='<div class="screen"><div class="seal"><svg width="40" height="40" viewBox="0 0 40 40" fill="none">'+
+      '<circle cx="20" cy="20" r="18" stroke="#CBA255" stroke-width="1.2"/><path d="M13 20l5 5 9-11" stroke="#CBA255" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+      '<p class="eyebrow" style="text-align:center">Your Alignment Plan</p>'+
+      '<h2 style="text-align:center">Order begins here</h2>'+
+      '<p class="lede" style="text-align:center">This is your starting point. Carry your Rank 1 area through one 30-day cycle of Plan → Action → Results — then return and renew.</p>'+
+      '<div class="card" style="border-color:var(--gold);background:linear-gradient(180deg,rgba(203,162,85,.14),rgba(203,162,85,.04))">'+
+      '<p class="eyebrow" style="margin-bottom:6px">This Cycle · by '+dstr+'</p>'+
+      '<div class="a-nm" style="font-size:24px">'+committed.sub+'</div>'+
+      '<div class="a-sub">'+committed.sector+' &nbsp;·&nbsp; Rank '+committed.rankNum+'</div></div>'+
+      '<h2 style="font-size:22px;margin-top:24px">All ranked areas</h2><div class="card">';
+    S.candidates.forEach(function(c){
+      html+='<div class="areaitem"><span class="rank" style="background:'+(c.rankNum===1?"var(--sage)":c.rankNum===2?"var(--gold-soft)":"var(--dim)")+';color:#1a1730">R'+c.rankNum+'</span>'+
+        '<div class="meta"><div class="a-nm" style="font-size:18px">'+c.sub+'</div><div class="a-sub">'+c.sector+'</div></div></div>';
+    });
+    html+='</div><div class="scripture">And let us not be weary in well doing: for in due season we shall reap, if we faint not.<small>Galatians 6:9 · KJV</small></div>'+
+      '<button class="btn" onclick="window.print()">Save / print my plan</button>'+
+      '<button class="btn btn-ghost" id="again">Start over</button>'+
+      '<p class="note">In the full course, this is the moment your plan unlocks Module&nbsp;2 and your email is saved so your 30-day cycle and weekly Review&nbsp;→&nbsp;Realign&nbsp;→&nbsp;Renew rhythm can begin.</p></div>';
+    app.innerHTML=html;
+    document.getElementById("again").onclick=function(){
+      S={screen:"intro",mirror:{},flagged:[],sub:{},candidates:[],matrix:{},commitId:null,commitDate:""}; go("intro");
+    };
+  }
+
+  /* ---------- helpers ---------- */
+  function scaleHTML(id,saved){
+    var h='<div class="scale" data-scale="'+id+'">';
+    for(var n=1;n<=5;n++){ h+='<button class="dot" data-val="'+n+'" aria-pressed="'+(saved===n)+'">'+n+'</button>'; }
+    return h+'</div>';
+  }
+  function bindScale(cb){
+    app.querySelectorAll("[data-scale]").forEach(function(row){
+      row.querySelectorAll(".dot").forEach(function(d){
+        d.onclick=function(){
+          var val=parseInt(d.getAttribute("data-val"),10);
+          row.querySelectorAll(".dot").forEach(function(x){ x.setAttribute("aria-pressed", x===d); });
+          cb(row.getAttribute("data-scale"), val);
+        };
+      });
+    });
+  }
+  function roman(n){ return ["","I","II","III","IV","V"][n]||n; }
+
+  render();
+})();
+</script>
+</body>
+</html>
