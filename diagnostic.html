@@ -440,9 +440,10 @@
         '<div class="meta"><div class="a-nm" style="font-size:18px">'+c.sub+'</div><div class="a-sub">'+c.sector+'</div></div></div>';
     });
     html+='</div><div class="scripture">And let us not be weary in well doing: for in due season we shall reap, if we faint not.<small>Galatians 6:9 · KJV</small></div>'+
-      '<button class="btn" onclick="window.print()">Save / print my plan</button>'+
-      '<button class="btn btn-ghost" id="again">Start over</button>'+
-      '<p class="note">In the full course, this is the moment your plan unlocks Module&nbsp;2 and your email is saved so your 30-day cycle and weekly Review&nbsp;→&nbsp;Realign&nbsp;→&nbsp;Renew rhythm can begin.</p></div>';
+      '<a class="btn" id="enrollBtn" href="https://erica-s-site-90c9.thinkific.com/enroll/3815363?price_id=4777279" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box">Start My 30-Day Cycle — Join for $33/mo</a>'+
+      '<p class="note" style="text-align:center;margin-top:10px">Module 1 and your Rank 1 plan unlock the moment you join — plus the weekly Review&nbsp;→&nbsp;Realign&nbsp;→&nbsp;Renew rhythm to carry it through.</p>'+
+      '<button class="btn btn-ghost" onclick="window.print()" style="margin-top:16px">Save / print my plan</button>'+
+      '<button class="btn btn-ghost" id="again">Start over</button></div>';
     app.innerHTML=html;
     document.getElementById("again").onclick=function(){
       S={screen:"intro",mirror:{},flagged:[],sub:{},candidates:[],matrix:{},commitId:null,commitDate:""}; go("intro");
